@@ -3,12 +3,13 @@ package xslt
 import (
 	"container/list"
 	"fmt"
-	"github.com/jbowtie/gokogiri/xml"
-	"github.com/jbowtie/gokogiri/xpath"
 	"log"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/jbowtie/gokogiri/xml"
+	"github.com/jbowtie/gokogiri/xpath"
 )
 
 const XSLT_NAMESPACE = "http://www.w3.org/1999/XSL/Transform"
@@ -326,6 +327,8 @@ func (style *Stylesheet) Process(doc *xml.XmlDocument, options StylesheetOptions
 	// lookup output method, doctypes, encoding
 	// create output document with appropriate values
 	output := xml.CreateEmptyDocument(doc.InputEncoding(), doc.OutputEncoding())
+	defer output.Free()
+
 	// init context node/document
 	context := &ExecutionContext{Output: output.Me, OutputNode: output, Style: style, Source: doc}
 	context.Current = doc
